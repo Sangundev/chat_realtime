@@ -4,6 +4,8 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./routers/auth.routes.js";
 import messageRoutes from "./routers/message.routers.js";
+import userRoutes from "./routers/user.routers.js";
+
 import connectToMongoDB from "./db/connectToMongoDB.js";
 
 const app = express();
@@ -15,7 +17,7 @@ app.use(cookieParser());
 const PORT =process.env.PORT || 5000;
 app.use("/api/auth",authRoutes);
 app.use("/api/messages",messageRoutes);
-
+app.use("/api/users",userRoutes);
 
 // app.get("/",(req, res) => {
 //     //root router http://localhost:5000/

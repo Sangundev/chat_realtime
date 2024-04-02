@@ -53,13 +53,16 @@ export const getMessage = async (req, res) => {
             participants: { $all: [senderId, userToChatID] },
         }).populate("messages");
 
+
+
         // Nếu không tìm thấy cuộc trò chuyện, trả về một mảng rỗng
         if (!conversation) {
             return res.status(200).json([]);
         }
-
+        
+        const messages = conversation.messages;
         // Trả về dữ liệu tin nhắn trong cuộc trò chuyện
-        res.status(200).json(conversation.messages);
+        res.status(200).json(messages);
     } catch (error) {
         console.log("Không thể lấy tin nhắn trong controller này:", error.message);
         res.status(500).json({ error: "Lỗi server" });
