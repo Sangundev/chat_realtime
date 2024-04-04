@@ -1,6 +1,6 @@
 http://localhost:5173/
 
-2:48:18
+3:54:12 
 npm run server
 
 npm run dev
