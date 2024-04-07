@@ -7,8 +7,11 @@ import messageRoutes from "./routers/message.routers.js";
 import userRoutes from "./routers/user.routers.js";
 
 import connectToMongoDB from "./db/connectToMongoDB.js";
+import { app, server } from "./socket/socket.js";
+import path from "path";
 
-const app = express();
+const __dirname = path.resolve();
+// const app = express();
 dotenv.config();
 
 app.use(express.json()); // from req.body
@@ -19,14 +22,14 @@ app.use("/api/auth",authRoutes);
 app.use("/api/messages",messageRoutes);
 app.use("/api/users",userRoutes);
 
-// app.get("/",(req, res) => {
-//     //root router http://localhost:5000/
-//     res.send("Hello World!!");
-// });
+app.use(express.static(path.join(__dirname,"frontend/dist")));
 
 
+app.get("*", (req, res) => {
+	res.sendFile(path.join(__dirname, "frontend", "dist", "index.html"));
+});
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     connectToMongoDB();
     console.log(`Server running on port ${PORT}`);
 });

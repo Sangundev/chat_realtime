@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import ConversationModel from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
     try {
@@ -32,9 +33,17 @@ export const sendMessage = async (req, res) => {
         if(newMessage){
             conversation.messages.push(newMessage._id);
         }
+
+
         // await conversation.save(); // Lưu lại cuộc trò chuyện
         // await newMessage.save();
         await Promise.all([conversation.save(),newMessage.save()]);
+
+        const receiverSocketId = getReceiverSocketId(receiverId);
+
+        if(receiverSocketId){
+            io.to(receiverSocketId).emit("newMessage",newMessage);
+        }
         // Trả về tin nhắn mới đã tạo
         res.status(201).json(newMessage);
     } catch (error) {
